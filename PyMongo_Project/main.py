@@ -8,12 +8,13 @@ def get_data(api):
             starships.append(each)
         new = requests.get(api["next"])
         api = new.json()
-        if api["next"] == None:
-            for each in api["results"]:
-                starships.append(each)
+    if api["next"] == None:
+        for each in api["results"]:
+            starships.append(each)
     return starships
 
 def get_ids(database):
+    all_ids = []
     for pilot in database:
         if pilot["pilots"] != []:
             ids = []
@@ -23,9 +24,11 @@ def get_ids(database):
                 pilot_id = db.characters.find({"name": pilot_json["name"]}, {"_id": 1})
                 for each in pilot_id:
                     ids.append(each["_id"])
+                    all_ids.append(each["_id"])
             db.starships.update_one({"_id": pilot["_id"]},
                                     {"$set":
                                          {"pilots": ids}})
+    return all_ids
 
 client = pymongo.MongoClient()
 db = client['starwars']
@@ -39,3 +42,4 @@ db["starships"].insert_many(get_data(swapi_api))
 pilots = db.starships.find()
 
 get_ids(pilots)
+
