@@ -1,5 +1,9 @@
 import pymongo
 import requests
+from bson import objectid
+
+def add_to_database(api):
+    db["starships"].insert_many(get_data(api))
 
 def get_data(api):
     starships = []
@@ -30,16 +34,21 @@ def get_ids(database):
                                          {"pilots": ids}})
     return all_ids
 
+def delete_starship(starship_id: str):
+    star_id = objectid.ObjectId(starship_id)
+    db.starships.delete_many({"_id": star_id})
+
 client = pymongo.MongoClient()
 db = client['starwars']
 db.starships.drop()
 
-swapi = requests.get("https://swapi.dev/api/starships/?page=1")
-swapi_api = swapi.json()
+if __name__ == "__main__":
+    swapi = requests.get("https://swapi.dev/api/starships/?page=1")
+    swapi_api = swapi.json()
 
-db["starships"].insert_many(get_data(swapi_api))
+    add_to_database(swapi_api)
 
-pilots = db.starships.find()
+    pilots = db.starships.find()
 
-get_ids(pilots)
+    get_ids(pilots)
 
