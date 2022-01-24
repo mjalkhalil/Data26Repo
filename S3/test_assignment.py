@@ -17,7 +17,7 @@ def test_create_dataframe():
     assert isinstance(TestObject.df, pd.DataFrame)
 
 def test_to_csv():
-    s3_object = s3_client.get_object(Bucket=bucket_name, Key="Data26/Test/Jad-fish-market.csv")
+    s3_object = s3_client.get_object(Bucket=bucket_name, Key="Data26/fish/Jad.csv")
     df = pd.read_csv(s3_object["Body"])
     df = df.groupby("Species").mean()
     assert len(TestObject.averages) == 7

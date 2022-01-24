@@ -23,7 +23,7 @@ class Fish:
         self._to_csv()
         print(self.averages)
         self.s3_client.upload_file(Filename="Jad-fish-market.csv", Bucket=self.bucket_name,
-                                   Key="Data26/Test/Jad-fish-market.csv")
+                                   Key="Data26/fish/Jad.csv")
 
     def _load_bucket(self):
         self.bucket_contents = self.s3_client.list_objects_v2(Bucket=self.bucket_name)
