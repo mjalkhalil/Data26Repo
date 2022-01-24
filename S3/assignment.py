@@ -19,14 +19,17 @@ class Fish:
         self.s3_resource = boto3.resource("s3")
         self.bucket_name = bucket_name
         self._load_bucket()
-        self._create_csv(filename)
+        self._create_dataframe(filename)
+        self._to_csv()
+        self.s3_client.upload_file(Filename="Jad-fish-market.csv", Bucket=self.bucket_name,
+                                   Key="Data26/Test/Jad-fish-market.csv")
         pass
 
     def _load_bucket(self):
         self.bucket_contents = self.s3_client.list_objects_v2(Bucket=self.bucket_name)
 
 
-    def _create_csv(self, filename: str):
+    def _create_dataframe(self, filename: str):
         i = 0
         files = []
         data = []
@@ -49,6 +52,8 @@ class Fish:
         self.df = self.df.reset_index()
         self.df = self.df.drop("index", axis=1)
 
+    def _to_csv(self):
+        round(self.average(), 2).to_csv("Jad-fish-market.csv")
 
     def average(self):
         return self.df.groupby("Species").mean()
