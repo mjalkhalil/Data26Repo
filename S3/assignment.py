@@ -21,13 +21,12 @@ class Fish:
         self._load_bucket()
         self._create_dataframe(filename)
         self._to_csv()
+        print(self.averages)
         self.s3_client.upload_file(Filename="Jad-fish-market.csv", Bucket=self.bucket_name,
                                    Key="Data26/Test/Jad-fish-market.csv")
-        pass
 
     def _load_bucket(self):
         self.bucket_contents = self.s3_client.list_objects_v2(Bucket=self.bucket_name)
-
 
     def _create_dataframe(self, filename: str):
         i = 0
@@ -54,6 +53,7 @@ class Fish:
 
     def _to_csv(self):
         round(self.average(), 2).to_csv("Jad-fish-market.csv")
+        self.averages = round(self.average(), 2)
 
     def average(self):
         return self.df.groupby("Species").mean()
@@ -71,5 +71,3 @@ bucket_name = "data-eng-resources"
 file_prefix = "python/fish"
 
 Trial = Fish(bucket_name, file_prefix)
-
-print(Trial.average())

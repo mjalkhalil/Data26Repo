@@ -21,7 +21,7 @@ bucket_name = "data-eng-resources"
 
 # for object in bucket_contents["Contents"]:
 #     print(object["Key"])
-
+#
 # for content in bucket.objects.all():
 #     print(content.key)
 
@@ -33,14 +33,14 @@ bucket_name = "data-eng-resources"
 # pp(json.loads(strbody))
 
 # Reading CSV file from Bucket
-# s3_object = s3_client.get_object(Bucket = bucket_name, Key="python/happiness-2019.csv")
+# s3_object = s3_client.get_object(Bucket = bucket_name, Key="Data26/Test/Jad-fish-market.csv")
 # df = pd.read_csv(s3_object["Body"])
 # print(df)
 
 # Create a json file and upload it to S3
-dict_to_upload = {"name": "data", "status": 2}
-
-with open("Jad.json", "w") as jsonfile:
-    json.dump(dict_to_upload, jsonfile)
-
-s3_client.upload_file(Filename="Jad.json", Bucket=bucket_name, Key="Data26/Test/Jad.json")
+# dict_to_upload = {"name": "data", "status": 2}
+#
+# with open("Jad.json", "w") as jsonfile:
+#     json.dump(dict_to_upload, jsonfile)
+#
+# s3_client.upload_file(Filename="Jad.json", Bucket=bucket_name, Key="Data26/Test/Jad.json")
