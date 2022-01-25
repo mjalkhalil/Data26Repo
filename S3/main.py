@@ -46,3 +46,10 @@ bucket_name = "data-eng-resources"
 # s3_client.upload_file(Filename="Jad.json", Bucket=bucket_name, Key="Data26/Test/Jad.json")
 
 #print(s3_client.list_objects_v2(Bucket=bucket_name))
+
+# df_with_index = self.averages
+# df_with_index["Species"] = df_with_index.index
+# cols = df_with_index.columns.tolist()
+# cols = cols[-1:] + cols[:-1]
+# df_with_index =df_with_index[cols]
+# json_df = df_with_index.to_json(orient="records")

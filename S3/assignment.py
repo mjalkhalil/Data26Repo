@@ -5,9 +5,12 @@ s3 - 'data-eng-resources/Data26/fish/your-name'Transformation: data averaged by 
 create csv of all 3 files with averages of all fish species and add to new csv file.
 """
 
+import pymongo
 import boto3
 import pandas as pd
 import numpy as np
+from pprint import pprint as pp
+
 
 class Fish:
     """
@@ -105,14 +108,50 @@ class Fish:
         else:
             print(self.df)
 
+    def turn_dict(self):
+        """
+        Turn my dataframe into a list of dictionaries.
+        :return: list of dictionaries
+        """
+        df_with_index = self.averages
+        df_with_index["Species"] = df_with_index.index
+        cols = df_with_index.columns.tolist()
+        cols = cols[-1:] + cols[:-1]
+        df_with_index = df_with_index[cols]
+        dict_df = df_with_index.to_dict(orient="records")
+        return dict_df
+
+    def to_mongo(self, client_id: str, collection_name: str):
+        """
+        Upload the list of dictionaries to the mongoDB collection
+        :param client_id: the MongoDB client ID
+        :param collection_name: The name of the collection to be created and used
+        :return:
+        """
+        client = pymongo.MongoClient(client_id)
+        db = client.Sparta
+        db[collection_name].drop()
+        db[collection_name].insert_many(Trial.turn_dict())
+        return db["fishMarket"].find()
+
 if __name__ == "__main__":
 
     pd.set_option('display.max_rows', 500)
     pd.set_option('display.max_columns', 500)
     pd.set_option('display.width', 1000)
-
     bucket_name = "data-eng-resources"
     file_prefix = "python/fish-market"
     file_suffix = ".csv"
+    mongo_client = "mongodb://35.156.9.121:27017/Sparta"
+    collection = "fishMarket"
 
     Trial = Fish(bucket_name, file_prefix, file_suffix, column_name="Species")
+
+    client = pymongo.MongoClient(mongo_client)
+    db = client.Sparta
+    db["fishMarket"].drop()
+
+    dicts = Trial.to_mongo(mongo_client, collection)
+
+    for each in dicts:
+        pp(each)
