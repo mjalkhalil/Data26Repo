@@ -1,14 +1,11 @@
-import pandas as pd
-
 from assignment import *
 import boto3
 
 bucket_name = "data-eng-resources"
 file_prefix = "python/fish-market"
-file_suffix = ".csv"
 s3_client = boto3.client("s3")
 
-TestObject = Fish(bucket_name, file_prefix, file_suffix, column_name="Species")
+TestObject = Fish(bucket_name, file_prefix, column_name="Species")
 
 
 def test_load_bucket():
