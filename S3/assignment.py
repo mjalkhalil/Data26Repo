@@ -48,21 +48,29 @@ class Fish:
         :param file_suffix: What the files should end with.
         :return:
         """
+        # Create empty lists to store names from collected files.
         files = []
         data = []
         columns = []
+        # Collects the files from the bucket with the specified prefixes and suffixes and adds the names of the files
+        # to a list called files.
         for each in self.bucket_contents["Contents"]:
             if each["Key"].startswith(file_prefix) and each["Key"].endswith(file_suffix):
                 files.append(each["Key"])
+        # This collects the data from the files with the names from the files list and appends them to a list after
+        # transforming them to numpy arrays from dataframes.
         for file in files:
             s3_object = self.s3_client.get_object(Bucket=self.bucket_name, Key=file)
             arr = pd.read_csv(s3_object["Body"])
+            # Collect the column names to apply back to the final dataframe.
             if len(columns) == 0:
                 for col in arr.columns:
                     columns.append(col)
             data.append(arr.to_numpy())
+        # Turn the list of lists into a single list with all the data.
         data = [item for sublist in data for item in sublist]
         data = np.array(data)
+        # Create the final dataframe and fix the columns and index.
         self.df = pd.DataFrame(data)
         self.df.columns = columns
         self.df = self.df.reset_index()
