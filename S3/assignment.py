@@ -6,6 +6,7 @@ create csv of all 3 files with averages of all fish species and add to new csv f
 """
 
 import pymongo
+import json
 import boto3
 import pandas as pd
 import numpy as np
@@ -133,7 +134,7 @@ class Fish:
         client = pymongo.MongoClient(client_id)
         db = client.Sparta
         db[collection_name].drop()
-        db[collection_name].insert_many(Trial.turn_dict(df))
+        db[collection_name].insert_many(self.turn_dict(df))
         return db["fishMarket"].find()
 
 if __name__ == "__main__":
