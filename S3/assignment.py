@@ -17,7 +17,7 @@ class Fish:
     Takes data from a set of fish csvs to find the average values of each fish.
     """
 
-    def __init__(self, bucket_name: str, file_prefix: str, file_suffix: str, column_name: str):
+    def __init__(self, bucket_name: str, file_prefix: str, column_name: str):
         """
         Initialises the class and completes the required tasks to get the average values for each species of fish.
         The class has been made adaptive by giving the user the ability to specify which files to use and on which
@@ -32,7 +32,7 @@ class Fish:
         self.s3_resource = boto3.resource("s3")
         self.bucket_name = bucket_name
         self._load_bucket()
-        self._create_dataframe(file_prefix, file_suffix)
+        self._create_dataframe(file_prefix)
         self._to_csv(column_name)
         self.s3_client.upload_file(Filename="Jad-fish-market.csv", Bucket=self.bucket_name,
                                    Key="Data26/fish/Jad.csv")
@@ -44,7 +44,7 @@ class Fish:
         """
         self.bucket_contents = self.s3_client.list_objects_v2(Bucket=self.bucket_name)
 
-    def _create_dataframe(self, file_prefix: str, file_suffix: str):
+    def _create_dataframe(self, file_prefix: str):
         """
         Creates a dataframe including all the specified files given by the prefix and suffix.
         All files must have the same columns.
@@ -59,7 +59,7 @@ class Fish:
         # Collects the files from the bucket with the specified prefixes and suffixes and adds the names of the files
         # to a list called files.
         for each in self.bucket_contents["Contents"]:
-            if each["Key"].startswith(file_prefix) and each["Key"].endswith(file_suffix):
+            if each["Key"].startswith(file_prefix) and each["Key"].endswith(".csv"):
                 files.append(each["Key"])
         # This collects the data from the files with the names from the files list and appends them to a list after
         # transforming them to numpy arrays from dataframes.
@@ -143,11 +143,11 @@ if __name__ == "__main__":
     pd.set_option('display.width', 1000)
     bucket_name = "data-eng-resources"
     file_prefix = "python/fish-market"
-    file_suffix = ".csv"
+#    file_suffix = ".csv"
     mongo_client = "mongodb://35.156.9.121:27017/Sparta"
     collection = "fishMarket"
 
-    Trial = Fish(bucket_name, file_prefix, file_suffix, column_name="Species")
+    Trial = Fish(bucket_name, file_prefix, column_name="Species")
 
     dicts = Trial.to_mongo(mongo_client, collection, Trial.averages)
 
