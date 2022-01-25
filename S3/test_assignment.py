@@ -10,7 +10,10 @@ s3_client = boto3.client("s3")
 TestObject = Fish(bucket_name, file_prefix)
 
 def test_load_bucket():
-    assert TestObject.bucket_contents["Contents"] == s3_client.list_objects_v2(Bucket=bucket_name)["Contents"]
+    bucket_contents_a = s3_client.list_objects_v2(Bucket=bucket_name)["Contents"]
+    bucket_contents_b = TestObject.bucket_contents["Contents"]
+    for a, b in zip(bucket_contents_a, bucket_contents_b):
+        assert a["Key"] == b["Key"]
 
 def test_create_dataframe():
     assert TestObject.df is not None

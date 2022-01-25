@@ -21,7 +21,7 @@ bucket_name = "data-eng-resources"
 
 # for object in bucket_contents["Contents"]:
 #     print(object["Key"])
-#
+
 # for content in bucket.objects.all():
 #     print(content.key)
 
@@ -44,3 +44,5 @@ bucket_name = "data-eng-resources"
 #     json.dump(dict_to_upload, jsonfile)
 #
 # s3_client.upload_file(Filename="Jad.json", Bucket=bucket_name, Key="Data26/Test/Jad.json")
+
+#print(s3_client.list_objects_v2(Bucket=bucket_name))

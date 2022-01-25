@@ -63,11 +63,12 @@ class Fish:
         print(self.df)
         return self.df
 
-pd.set_option('display.max_rows', 500)
-pd.set_option('display.max_columns', 500)
-pd.set_option('display.width', 1000)
+if __name__ == "__main__":
 
-bucket_name = "data-eng-resources"
-file_prefix = "python/fish-market"
+    pd.set_option('display.max_rows', 500)
+    pd.set_option('display.max_columns', 500)
+    pd.set_option('display.width', 1000)
+    bucket_name = "data-eng-resources"
+    file_prefix = "python/fish-market"
 
-Trial = Fish(bucket_name, file_prefix)
+    Trial = Fish(bucket_name, file_prefix)
