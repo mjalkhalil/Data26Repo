@@ -40,4 +40,3 @@ def test_to_mongo():
     client = pymongo.MongoClient("mongodb://35.156.9.121:27017/Sparta")
     db = client.Sparta
     assert "fishMarket" in db.list_collection_names()
-    

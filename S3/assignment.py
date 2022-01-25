@@ -27,6 +27,7 @@ class Fish:
         :param file_suffix: The ending characters in a file name. Must be a string.
         :param column_name: The column on which to group the data by. Must be a string.
         """
+        self.column_name = column_name
         self.s3_client = boto3.client("s3")
         self.s3_resource = boto3.resource("s3")
         self.bucket_name = bucket_name
@@ -114,8 +115,8 @@ class Fish:
         :return: list of dictionaries
         """
         df_with_index = averages
-        if "Species" not in df_with_index:
-            df_with_index["Species"] = df_with_index.index
+        if self.column_name not in df_with_index:
+            df_with_index[self.column_name] = df_with_index.index
         cols = df_with_index.columns.tolist()
         cols = cols[-1:] + cols[:-1]
         df_with_index = df_with_index[cols]
