@@ -108,20 +108,21 @@ class Fish:
         else:
             print(self.df)
 
-    def turn_dict(self):
+    def turn_dict(self, averages):
         """
         Turn my dataframe into a list of dictionaries.
         :return: list of dictionaries
         """
-        df_with_index = self.averages
-        df_with_index["Species"] = df_with_index.index
+        df_with_index = averages
+        if "Species" not in df_with_index:
+            df_with_index["Species"] = df_with_index.index
         cols = df_with_index.columns.tolist()
         cols = cols[-1:] + cols[:-1]
         df_with_index = df_with_index[cols]
         dict_df = df_with_index.to_dict(orient="records")
         return dict_df
 
-    def to_mongo(self, client_id: str, collection_name: str):
+    def to_mongo(self, client_id: str, collection_name: str, df):
         """
         Upload the list of dictionaries to the mongoDB collection
         :param client_id: the MongoDB client ID
@@ -131,7 +132,7 @@ class Fish:
         client = pymongo.MongoClient(client_id)
         db = client.Sparta
         db[collection_name].drop()
-        db[collection_name].insert_many(Trial.turn_dict())
+        db[collection_name].insert_many(Trial.turn_dict(df))
         return db["fishMarket"].find()
 
 if __name__ == "__main__":
@@ -147,11 +148,7 @@ if __name__ == "__main__":
 
     Trial = Fish(bucket_name, file_prefix, file_suffix, column_name="Species")
 
-    client = pymongo.MongoClient(mongo_client)
-    db = client.Sparta
-    db["fishMarket"].drop()
-
-    dicts = Trial.to_mongo(mongo_client, collection)
+    dicts = Trial.to_mongo(mongo_client, collection, Trial.averages)
 
     for each in dicts:
         pp(each)
