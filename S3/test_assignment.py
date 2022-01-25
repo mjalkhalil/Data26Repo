@@ -4,10 +4,11 @@ from assignment import *
 import boto3
 
 bucket_name = "data-eng-resources"
-file_prefix = "python/fish"
+file_prefix = "python/fish-market"
+file_suffix = ".csv"
 s3_client = boto3.client("s3")
 
-TestObject = Fish(bucket_name, file_prefix)
+TestObject = Fish(bucket_name, file_prefix, file_suffix, column_name="Species")
 
 def test_load_bucket():
     bucket_contents_a = s3_client.list_objects_v2(Bucket=bucket_name)["Contents"]
