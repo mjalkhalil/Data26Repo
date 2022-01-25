@@ -34,7 +34,7 @@ class Fish:
         data = []
         columns = []
         for each in self.bucket_contents["Contents"]:
-            if each["Key"].startswith(filename):
+            if each["Key"].startswith(filename) and each["Key"].endswith(".csv"):
                 files.append(each["Key"])
         for file in files:
             s3_object = self.s3_client.get_object(Bucket=self.bucket_name, Key=file)
@@ -68,6 +68,6 @@ pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 
 bucket_name = "data-eng-resources"
-file_prefix = "python/fish"
+file_prefix = "python/fish-market"
 
 Trial = Fish(bucket_name, file_prefix)
