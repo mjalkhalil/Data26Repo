@@ -6,7 +6,6 @@ create csv of all 3 files with averages of all fish species and add to new csv f
 """
 
 import pymongo
-import json
 import boto3
 import pandas as pd
 import numpy as np
