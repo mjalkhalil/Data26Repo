@@ -24,7 +24,6 @@ class Fish:
         column to group the data on.
         :param bucket_name: The bucket name to be used. Must be a string.
         :param file_prefix: The starting characters in a file name. Must be a string.
-        :param file_suffix: The ending characters in a file name. Must be a string.
         :param column_name: The column on which to group the data by. Must be a string.
         """
         self.column_name = column_name
@@ -49,7 +48,6 @@ class Fish:
         Creates a dataframe including all the specified files given by the prefix and suffix.
         All files must have the same columns.
         :param file_prefix: What the files should start with.
-        :param file_suffix: What the files should end with.
         :return:
         """
         # Create empty lists to store names from collected files.
