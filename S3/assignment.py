@@ -143,7 +143,6 @@ if __name__ == "__main__":
     pd.set_option('display.width', 1000)
     bucket_name = "data-eng-resources"
     file_prefix = "python/fish-market"
-#    file_suffix = ".csv"
     mongo_client = "mongodb://35.156.9.121:27017/Sparta"
     collection = "fishMarket"
 
